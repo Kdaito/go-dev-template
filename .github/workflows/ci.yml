@@ -1,0 +1,31 @@
+name: lint test build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-test-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.23"
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Lint the code
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.23
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Build the code
+        run: go build -v ./...
