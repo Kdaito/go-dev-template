@@ -1,12 +1,11 @@
-package main
+package app
 
 import (
 	"fmt"
-
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
+func RunServer() {
 	r := gin.Default()
 
 	r.GET("/ping", func(c *gin.Context) {
