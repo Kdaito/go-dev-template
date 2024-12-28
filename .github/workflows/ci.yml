@@ -1,31 +1,44 @@
-name: lint test build
+name: CI
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 jobs:
-  lint-test-build:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version: "1.23"
-
-      - name: Install dependencies
-        run: go mod tidy
-
-      - name: Lint the code
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.23
-
-      - name: Run tests
-        run: go test -v ./...
-
-      - name: Build the code
+          go-version: ./go.mod
+      - name: Download dependencies
+        run: go mod download
+      - name: Build
         run: go build -v ./...
+
+  lint:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ./go.mod
+      - uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+  unit-test:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ./go.mod
+      - run: go test -v ./...
