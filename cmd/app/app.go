@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-dev-sample/internal/application/server"
+	"go-dev-sample/internal/server"
 )
 
 func main() {
