@@ -3,6 +3,9 @@ package server
 import (
 	"database/sql"
 	"fmt"
+	"go-dev-sample/internal/application/handler"
+	"go-dev-sample/internal/domain/service"
+	"go-dev-sample/internal/infrastructure"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +13,7 @@ import (
 )
 
 type Server struct {
-	db *sql.DB
+	db     *sql.DB
 	router *gin.Engine
 }
 
@@ -24,11 +27,9 @@ func (server *Server) setUpDb() {
 	pw := os.Getenv("MYSQL_ROOT_PASSWORD")
 	db_name := os.Getenv("MYSQL_DATABASE")
 
-	fmt.Printf("user: %s, pw: %s, db_name: %s", user, pw, db_name)
+	var datasource = fmt.Sprintf("%s:%s@tcp(db:3306)/%s?charset=utf8&parseTime=true", user, pw, db_name)
 
-	var path = fmt.Sprintf("%s:%s@tcp(db:3306)/%s?charset=utf8&parseTime=true", user, pw, db_name)
-
-	if db, err := sql.Open("mysql", path)	; err != nil {
+	if db, err := sql.Open("mysql", datasource); err != nil {
 		panic(fmt.Sprintf("Failed to connect to database: %v", err))
 	} else {
 		server.db = db
@@ -40,11 +41,15 @@ func (server *Server) setUpDb() {
 func (server *Server) setUpRouter() {
 	router := gin.Default()
 
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pongpongpong",
-		})
-	})
+	// DI
+	userRepo := infrastructure.NewUser(server.db)
+
+	userService := service.NewUserService(userRepo)
+
+	userHandler := handler.NewUserHandler(userService)
+
+	// routing
+	router.GET("/users/:id", userHandler.GetUserByID)
 
 	server.router = router
 }
