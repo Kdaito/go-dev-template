@@ -36,35 +36,8 @@ linter
 lintもdockerイメージ上で行えるように実装
 (開発者はdockerとdocker-composeさえあれば開発を開始できるようにした方が良いのかなと思いこうしました。)
 
-## CI
 
-とりあえず Github action で CI を実行
-
-- build
-  - go モジュールのインポート
-  - ビルド
-- unit test
-  - `go test`で実行
-- lint
-  - (golangci-lint)[https://golangci-lint.run]で実行（とりあえずデフォルト設定）
-
-### 補足
-
-- 最初に build を実行し、モジュールのインポート & 結果をキャッシュに
-- build の後、unit test と lint が並列で走る
-
-## ディレクトリ構成
-
-https://github.com/golang-standards/project-layout/tree/master
-
-ここを参考に作ってみた。
-
-この方針だとapiの実装は`internal/app`に作っていくことになりそう？
-
-- cmd
-  - `internal/app`に作成したappを実行する。
-- internal
-  - アプリの本体をここに作っていくイメージ
-- scripts
-  - スクリプト置いていく
-  - 現在はlinterだけだが、マイグレーションやtestなどのスクリプトが今後増えてきた場合はここに置いていくイメージ
+## その他のドキュメント
+- [`CIについて`](docs/ci.md)
+- [`ディレクトリ構成`](docs/directory.md)
+- [`アーキテクチャ`](docs/architecture.md)
