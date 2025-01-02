@@ -8,6 +8,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.local
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=TEST_DB
+      - MYSQL_USER=root
+
   db:
     build: ./db
     volumes:

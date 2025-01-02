@@ -1,9 +1,10 @@
 package main
 
 import (
-	"go-dev-sample/internal/app"
+	"go-dev-sample/internal/application/server"
 )
 
 func main() {
-	app.RunServer()
+	server := server.NewServer()
+	server.Start()
 }
