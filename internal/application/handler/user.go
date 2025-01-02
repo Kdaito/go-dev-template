@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo"
 )
 
 type UserHandler struct {
@@ -18,24 +18,22 @@ func NewUserHandler(service *service.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
 
-func (h *UserHandler) GetUserByID(c *gin.Context) {
+func (h *UserHandler) GetUserByID(c echo.Context) error {
 	// リクエストパラメータの取得
 	userId, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid parameter"})
-		return
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
 	}
 
 	// サービスの呼び出し
 	user, err := h.service.GetUserByID(userId)
 	if err != nil {
 		log.Printf("failed to get user: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
-		return
+		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
 	}
 
 	// レスポンスの生成
 	response := response.NewGetUserByIdResponse(user)
-	c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, response)
 }

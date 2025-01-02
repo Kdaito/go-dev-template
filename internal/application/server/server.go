@@ -8,13 +8,13 @@ import (
 	"go-dev-sample/internal/infrastructure"
 	"os"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/labstack/echo"
 )
 
 type Server struct {
 	db     *sql.DB
-	router *gin.Engine
+	router *echo.Echo
 }
 
 func NewServer() *Server {
@@ -39,7 +39,7 @@ func (server *Server) setUpDb() {
 
 // setUpRouter sets up the server's router.
 func (server *Server) setUpRouter() {
-	router := gin.Default()
+	router := echo.New()
 
 	// DI
 	userRepo := infrastructure.NewUser(server.db)
@@ -59,7 +59,7 @@ func (server *Server) Start() {
 	server.setUpDb()
 	server.setUpRouter()
 
-	if err := server.router.Run(":8080"); err != nil {
+	if err := server.router.Start(":8080"); err != nil {
 		panic(fmt.Sprintf("Failed to start server: %v", err))
 	}
 }
