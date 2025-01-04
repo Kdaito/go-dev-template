@@ -18,6 +18,27 @@ func NewUserHandler(service *service.UserService) *UserHandler {
 	return &UserHandler{service: service}
 }
 
+func (h *UserHandler) GetUserList(c echo.Context) error {
+	// サービスの呼び出し
+	users, err := h.service.GetUserList()
+	if err != nil {
+		log.Printf("failed to get user list: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
+	}
+
+	// レスポンスの生成
+	response := dto.UserList{}
+	for _, user := range users {
+		response = append(response, &dto.User{
+			ID:    strconv.Itoa(user.ID),
+			Name:  user.Name,
+			Email: user.Email,
+		})
+	}
+
+	return c.JSON(http.StatusOK, response)
+}
+
 func (h *UserHandler) GetUserByID(c echo.Context) error {
 	// リクエストパラメータの取得
 	userId, err := strconv.Atoi(c.Param("id"))
