@@ -42,6 +42,14 @@ func (server *Server) setUpDb() {
 func (server *Server) setUpRouter() {
 	router := echo.New()
 
+	router.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"*"},
+		AllowHeaders: []string{"*"},
+		AllowCredentials: true,
+	}))
+	router.Use(middleware.Logger())
+
 	// DI
 	userRepo := infrastructure.NewUser(server.db)
 
@@ -50,12 +58,6 @@ func (server *Server) setUpRouter() {
 	userHandler := handler.NewUserHandler(userService)
 
 	v1 := router.Group("/v1")
-
-	// set middleware
-	v1.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
-	}))
 
 	// routing
 	v1.GET("/users", userHandler.GetUserList)
