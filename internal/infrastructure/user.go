@@ -41,3 +41,18 @@ func (u *User) GetUserByID(id int) (*model.User, error) {
 	}
 	return user, nil
 }
+
+func (u *User) CreateUser(user *model.User) (*model.User, error) {
+	stmt, err := u.db.Exec("INSERT INTO user (name, email) VALUES (?, ?)", user.Name, user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	id, err := stmt.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	user.ID = int(id)
+	return user, nil
+}

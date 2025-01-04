@@ -63,3 +63,34 @@ func (h *UserHandler) GetUserByID(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, response)
 }
+
+func (h *UserHandler) CreateUser(c echo.Context) error {
+	// リクエストパラメータの取得
+	req := new(dto.UserCreateRequest)
+	if err := c.Bind(req); err != nil {
+		log.Printf("failed to bind request: %v", err)
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
+	}
+
+	// バリデーション
+	if err := req.Validate(nil); err != nil {
+		log.Printf("failed to validate request: %v", err)
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
+	}
+
+	// サービスの呼び出し
+	user, err := h.service.CreateUser(*req.Name, *req.Email)
+	if err != nil {
+		log.Printf("failed to create user: %v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
+	}
+
+	// レスポンスの生成
+	response := &dto.User{
+		ID:    strconv.Itoa(user.ID),
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
+	return c.JSON(http.StatusCreated, response)
+}
