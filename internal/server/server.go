@@ -10,6 +10,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 type Server struct {
@@ -48,8 +49,13 @@ func (server *Server) setUpRouter() {
 
 	userHandler := handler.NewUserHandler(userService)
 
+	v1 := router.Group("/v1")
+
+	// set middleware
+	v1.Use(middleware.CORS())
+
 	// routing
-	router.GET("/users/:id", userHandler.GetUserByID)
+	v1.GET("/users/:id", userHandler.GetUserByID)
 
 	server.router = router
 }
