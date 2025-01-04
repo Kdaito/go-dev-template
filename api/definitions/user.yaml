@@ -10,6 +10,18 @@ User:
     email:
       type: "string"
       example: "John@example.com"
+UserCreateRequest:
+  type: "object"
+  properties:
+    name:
+      type: "string"
+      example: "John Doe"
+    email:
+      type: "string"
+      example: "John@example.com"
+  required:
+    - name
+    - email
 UserList:
   type: "array"
   items:
