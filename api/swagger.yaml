@@ -10,6 +10,17 @@ tags:
 schemes:
 - "http"
 paths:
+  /users:
+    get:
+      tags:
+        - "users"
+      summary: "Get all users"
+      operationId: "getAllUsers"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "./definitions/user.yaml#/UserList"
   /users/{id}:
     get:
       tags:

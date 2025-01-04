@@ -55,6 +55,7 @@ func (server *Server) setUpRouter() {
 	v1.Use(middleware.CORS())
 
 	// routing
+	v1.GET("/users", userHandler.GetUserList)
 	v1.GET("/users/:id", userHandler.GetUserByID)
 
 	server.router = router
