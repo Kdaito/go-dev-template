@@ -33,8 +33,10 @@ paths:
           schema:
             $ref: "./definitions/user.yaml#/UserCreateRequest"
       responses:
-        201:
-          description: "Created"
+        200:
+          description: "Success"
+          schema:
+            $ref: "./definitions/user.yaml#/User"
   /users/{id}:
     get:
       tags:

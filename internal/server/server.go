@@ -52,11 +52,15 @@ func (server *Server) setUpRouter() {
 	v1 := router.Group("/v1")
 
 	// set middleware
-	v1.Use(middleware.CORS())
+	v1.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+	}))
 
 	// routing
 	v1.GET("/users", userHandler.GetUserList)
 	v1.GET("/users/:id", userHandler.GetUserByID)
+	v1.POST("/users", userHandler.CreateUser)
 
 	server.router = router
 }
