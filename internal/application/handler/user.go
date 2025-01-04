@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"go-dev-sample/internal/application/response"
+	"go-dev-sample/internal/application/dto"
 	"go-dev-sample/internal/domain/service"
 	"log"
 	"net/http"
@@ -34,6 +34,11 @@ func (h *UserHandler) GetUserByID(c echo.Context) error {
 	}
 
 	// レスポンスの生成
-	response := response.NewGetUserByIdResponse(user)
+	response := &dto.User{
+		ID:    strconv.Itoa(user.ID),
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
 	return c.JSON(http.StatusOK, response)
 }

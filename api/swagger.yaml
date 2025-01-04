@@ -1,0 +1,28 @@
+swagger: "2.0"
+info:
+  title: "Go Dev Sample API"
+  version: "1.0.0"
+host: "localhost:8080"
+basePath: "/v1"
+tags:
+- name: "users"
+  description: "User management"
+schemes:
+- "http"
+paths:
+  /users/{id}:
+    get:
+      tags:
+        - "users"
+      summary: "Get user by ID"
+      operationId: "getUserByID"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "./definitions/user.yaml#/User"
