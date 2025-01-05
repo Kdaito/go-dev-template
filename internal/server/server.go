@@ -4,13 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 	"go-dev-sample/internal/application/handler"
+	"go-dev-sample/internal/application/middleware"
 	"go-dev-sample/internal/domain/service"
 	"go-dev-sample/internal/infrastructure"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
 )
 
 type Server struct {
@@ -42,13 +42,9 @@ func (server *Server) setUpDb() {
 func (server *Server) setUpRouter() {
 	router := echo.New()
 
-	router.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{"*"},
-		AllowHeaders: []string{"*"},
-		AllowCredentials: true,
-	}))
-	router.Use(middleware.Logger())
+	// middleware
+	router.Use(middleware.LoggerMiddleware())
+	router.Use(middleware.CorsMiddleware())
 
 	// DI
 	userRepo := infrastructure.NewUser(server.db)
