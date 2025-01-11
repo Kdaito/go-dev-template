@@ -5,11 +5,17 @@ import (
 	"github.com/Kdaito/go-dev-template/internal/domain/repository"
 )
 
-type UserService struct {
-	repository repository.UserRepository
+type IUserService interface {
+	GetUserList() ([]*model.User, error)
+	GetUserByID(id int) (*model.User, error)
+	CreateUser(name string, email string) (*model.User, error)
 }
 
-func NewUserService(repository repository.UserRepository) *UserService {
+type UserService struct {
+	repository repository.IUserRepository
+}
+
+func NewUserService(repository repository.IUserRepository) IUserService {
 	return &UserService{repository: repository}
 }
 
