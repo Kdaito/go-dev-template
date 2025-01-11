@@ -10,7 +10,7 @@ type User struct {
 	db *sql.DB
 }
 
-func NewUser(db *sql.DB) repository.UserRepository {
+func NewUser(db *sql.DB) repository.IUserRepository {
 	return &User{db: db}
 }
 
