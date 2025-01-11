@@ -1,11 +1,11 @@
 package infrastructure
 
 import (
-	"go-dev-sample/internal/domain/model"
 	"regexp"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/Kdaito/go-dev-template/internal/domain/model"
 	"github.com/stretchr/testify/assert"
 )
 
