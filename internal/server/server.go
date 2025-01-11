@@ -3,12 +3,12 @@ package server
 import (
 	"database/sql"
 	"fmt"
-	"go-dev-sample/internal/application/handler"
-	"go-dev-sample/internal/application/middleware"
-	"go-dev-sample/internal/domain/service"
-	"go-dev-sample/internal/infrastructure"
 	"os"
 
+	"github.com/Kdaito/go-dev-template/internal/application/handler"
+	"github.com/Kdaito/go-dev-template/internal/application/middleware"
+	"github.com/Kdaito/go-dev-template/internal/domain/service"
+	"github.com/Kdaito/go-dev-template/internal/infrastructure"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 )
