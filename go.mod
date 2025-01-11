@@ -1,4 +1,4 @@
-module go-dev-sample
+module github.com/Kdaito/go-dev-template
 
 go 1.23
 

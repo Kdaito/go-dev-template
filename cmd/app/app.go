@@ -1,8 +1,6 @@
 package main
 
-import (
-	"go-dev-sample/internal/server"
-)
+import "github.com/Kdaito/go-dev-template/internal/server"
 
 func main() {
 	server := server.NewServer()

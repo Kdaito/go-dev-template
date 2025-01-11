@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"go-dev-sample/internal/application/dto"
-	"go-dev-sample/internal/domain/service"
 	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/Kdaito/go-dev-template/internal/application/dto"
+	"github.com/Kdaito/go-dev-template/internal/domain/service"
 	"github.com/labstack/echo/v4"
 )
 
