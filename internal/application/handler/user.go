@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Kdaito/go-dev-template/internal/application/dto"
+	"github.com/Kdaito/go-dev-template/internal/application/request"
+	"github.com/Kdaito/go-dev-template/internal/application/response"
 	"github.com/Kdaito/go-dev-template/internal/domain/service"
 	"github.com/labstack/echo/v4"
 )
@@ -27,16 +28,16 @@ func (h *UserHandler) GetUserList(c echo.Context) error {
 	}
 
 	// レスポンスの生成
-	response := dto.UserList{}
+	res := response.UserList{}
 	for _, user := range users {
-		response = append(response, &dto.User{
+		res = append(res, &response.UserResponse{
 			ID:    strconv.Itoa(user.ID),
 			Name:  user.Name,
 			Email: user.Email,
 		})
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, res)
 }
 
 func (h *UserHandler) GetUserByID(c echo.Context) error {
@@ -55,25 +56,25 @@ func (h *UserHandler) GetUserByID(c echo.Context) error {
 	}
 
 	// レスポンスの生成
-	response := &dto.User{
+	res := &response.UserResponse{
 		ID:    strconv.Itoa(user.ID),
 		Name:  user.Name,
 		Email: user.Email,
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, res)
 }
 
 func (h *UserHandler) CreateUser(c echo.Context) error {
 	// リクエストパラメータの取得
-	req := new(dto.UserCreateRequest)
+	req := new(request.UserCreateRequest)
 	if err := c.Bind(req); err != nil {
 		log.Printf("failed to bind request: %v", err)
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
 	}
 
 	// バリデーション
-	if err := req.Validate(nil); err != nil {
+	if err := c.Validate(req); err != nil {
 		log.Printf("failed to validate request: %v", err)
 		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
 	}
@@ -86,11 +87,11 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 	}
 
 	// レスポンスの生成
-	response := &dto.User{
+	res := &response.UserResponse{
 		ID:    strconv.Itoa(user.ID),
 		Name:  user.Name,
 		Email: user.Email,
 	}
 
-	return c.JSON(http.StatusCreated, response)
+	return c.JSON(http.StatusCreated, res)
 }

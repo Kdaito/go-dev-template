@@ -9,6 +9,8 @@ import (
 	"github.com/Kdaito/go-dev-template/internal/application/middleware"
 	"github.com/Kdaito/go-dev-template/internal/domain/service"
 	"github.com/Kdaito/go-dev-template/internal/infrastructure"
+	"github.com/Kdaito/go-dev-template/internal/lib"
+	"github.com/go-playground/validator/v10"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 )
@@ -42,7 +44,10 @@ func (server *Server) setUpDb() {
 func (server *Server) setUpRouter() {
 	router := echo.New()
 
-	// middleware
+	// set up custom validator
+	router.Validator = &lib.CustomValidator{Validator: validator.New()}
+
+	// set up middleware
 	router.Use(middleware.LoggerMiddleware())
 	router.Use(middleware.CorsMiddleware())
 
@@ -55,7 +60,7 @@ func (server *Server) setUpRouter() {
 
 	v1 := router.Group("/v1")
 
-	// routing
+	// set up routing
 	v1.GET("/users", userHandler.GetUserList)
 	v1.GET("/users/:id", userHandler.GetUserByID)
 	v1.POST("/users", userHandler.CreateUser)
