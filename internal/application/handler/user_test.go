@@ -9,6 +9,8 @@ import (
 	"testing"
 
 	"github.com/Kdaito/go-dev-template/internal/domain/model"
+	"github.com/Kdaito/go-dev-template/internal/lib"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -158,7 +160,7 @@ func TestGetUserByID(tt *testing.T) {
 		c.SetPath("/users/:id")
 		c.SetParamNames("id")
 		c.SetParamValues("invalid")
-		
+
 		userHandler := NewUserHandler(service)
 
 		err := userHandler.GetUserByID(c)
@@ -212,6 +214,7 @@ func TestCreateUser(tt *testing.T) {
 
 		// request setup
 		e := echo.New()
+		e.Validator = &lib.CustomValidator{Validator: validator.New()}
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(requestBody))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
@@ -263,10 +266,14 @@ func TestCreateUser(tt *testing.T) {
 		service := new(mockUserService)
 
 		// バリデーションに失敗するJSONリクエスト
-		var requestBody = `{}`
+		var requestBody = `{
+			"name": "",
+			"email": "invalid email"
+		}`
 
 		// request setup
 		e := echo.New()
+		e.Validator = &lib.CustomValidator{Validator: validator.New()}
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(requestBody))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
@@ -296,6 +303,7 @@ func TestCreateUser(tt *testing.T) {
 
 		// request setup
 		e := echo.New()
+		e.Validator = &lib.CustomValidator{Validator: validator.New()}
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(requestBody))
 		req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		rec := httptest.NewRecorder()
