@@ -2,9 +2,11 @@ package infrastructure
 
 import (
 	"database/sql"
+	"net/http"
 
 	"github.com/Kdaito/kinodokuna-be/internal/domain/model"
 	"github.com/Kdaito/kinodokuna-be/internal/domain/repository"
+	"github.com/Kdaito/kinodokuna-be/internal/lib/errors"
 )
 
 type User struct {
@@ -38,6 +40,11 @@ func (u *User) GetUserByID(id int) (*model.User, error) {
 	row := u.db.QueryRow("SELECT * FROM user WHERE id = ?", id)
 	user := &model.User{}
 	if err := row.Scan(&user.ID, &user.Name, &user.Email); err != nil {
+		// not found
+		if err == sql.ErrNoRows {
+			return nil, errors.New(http.StatusNotFound, err.Error())
+		}
+		// other error
 		return nil, err
 	}
 	return user, nil

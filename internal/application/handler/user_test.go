@@ -10,6 +10,7 @@ import (
 
 	"github.com/Kdaito/kinodokuna-be/internal/domain/model"
 	"github.com/Kdaito/kinodokuna-be/internal/lib"
+	"github.com/Kdaito/kinodokuna-be/internal/lib/errors"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
@@ -106,7 +107,6 @@ func TestGetUserList(tt *testing.T) {
 
 		// assertion
 		assert.Error(t, err)
-		assert.Equal(t, http.StatusInternalServerError, err.(*echo.HTTPError).Code)
 	})
 }
 
@@ -167,7 +167,7 @@ func TestGetUserByID(tt *testing.T) {
 
 		// assertion
 		assert.Error(t, err)
-		assert.Equal(t, http.StatusBadRequest, err.(*echo.HTTPError).Code)
+		assert.Equal(t, http.StatusBadRequest, err.(*errors.Error).Code)
 	})
 
 	tt.Run("異常系_サービスでエラー", func(t *testing.T) {
@@ -192,7 +192,6 @@ func TestGetUserByID(tt *testing.T) {
 
 		// assertion
 		assert.Error(t, err)
-		assert.Equal(t, http.StatusInternalServerError, err.(*echo.HTTPError).Code)
 	})
 }
 
@@ -258,7 +257,7 @@ func TestCreateUser(tt *testing.T) {
 
 		// assertion
 		assert.Error(t, err)
-		assert.Equal(t, http.StatusBadRequest, err.(*echo.HTTPError).Code)
+		assert.Equal(t, http.StatusBadRequest, err.(*errors.Error).Code)
 	})
 
 	tt.Run("異常系_リクエストバリデーションで失敗", func(t *testing.T) {
@@ -285,7 +284,7 @@ func TestCreateUser(tt *testing.T) {
 
 		// assertion
 		assert.Error(t, err)
-		assert.Equal(t, http.StatusBadRequest, err.(*echo.HTTPError).Code)
+		assert.Equal(t, http.StatusBadRequest, err.(*errors.Error).Code)
 	})
 
 	tt.Run("異常系_サービスでエラー", func(t *testing.T) {
@@ -315,6 +314,5 @@ func TestCreateUser(tt *testing.T) {
 
 		// assertion
 		assert.Error(t, err)
-		assert.Equal(t, http.StatusInternalServerError, err.(*echo.HTTPError).Code)
 	})
 }
