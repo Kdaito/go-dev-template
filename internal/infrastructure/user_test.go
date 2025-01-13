@@ -1,11 +1,13 @@
 package infrastructure
 
 import (
+	"net/http"
 	"regexp"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/Kdaito/kinodokuna-be/internal/domain/model"
+	"github.com/Kdaito/kinodokuna-be/internal/lib/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -61,6 +63,23 @@ func TestGetUserByID(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.Equal(t, "John Doe", user.Name)
+	})
+
+	t.Run("異常系 - ユーザーが見つからない場合", func(t *testing.T) {
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		defer db.Close()
+
+		rows := sqlmock.NewRows([]string{"id", "name", "email"})
+
+		mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM user WHERE id = ?")).WithArgs(1).WillReturnRows(rows)
+
+		repository := NewUser(db)
+		user, err := repository.GetUserByID(1)
+
+		assert.Error(t, err)
+		assert.Nil(t, user)
+		assert.Equal(t, http.StatusNotFound, err.(*errors.Error).Code)
 	})
 
 	t.Run("異常系 - QueryRowメソッドでエラー", func(t *testing.T) {

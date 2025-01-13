@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/Kdaito/kinodokuna-be/internal/application/request"
 	"github.com/Kdaito/kinodokuna-be/internal/application/response"
 	"github.com/Kdaito/kinodokuna-be/internal/domain/service"
+	"github.com/Kdaito/kinodokuna-be/internal/lib/errors"
 	"github.com/labstack/echo/v4"
 )
 
@@ -23,8 +23,7 @@ func (h *UserHandler) GetUserList(c echo.Context) error {
 	// サービスの呼び出し
 	users, err := h.service.GetUserList()
 	if err != nil {
-		log.Printf("failed to get user list: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
+		return err
 	}
 
 	// レスポンスの生成
@@ -45,14 +44,13 @@ func (h *UserHandler) GetUserByID(c echo.Context) error {
 	userId, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
+		return errors.New(http.StatusBadRequest, err.Error())
 	}
 
 	// サービスの呼び出し
 	user, err := h.service.GetUserByID(userId)
 	if err != nil {
-		log.Printf("failed to get user: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
+		return err
 	}
 
 	// レスポンスの生成
@@ -69,21 +67,18 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 	// リクエストパラメータの取得
 	req := new(request.UserCreateRequest)
 	if err := c.Bind(req); err != nil {
-		log.Printf("failed to bind request: %v", err)
-		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
+		return errors.New(http.StatusBadRequest, err.Error())
 	}
 
 	// バリデーション
 	if err := c.Validate(req); err != nil {
-		log.Printf("failed to validate request: %v", err)
-		return echo.NewHTTPError(http.StatusBadRequest, "invalid parameter")
+		return errors.New(http.StatusBadRequest, err.Error())
 	}
 
 	// サービスの呼び出し
 	user, err := h.service.CreateUser(*req.Name, *req.Email)
 	if err != nil {
-		log.Printf("failed to create user: %v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
+		return err
 	}
 
 	// レスポンスの生成

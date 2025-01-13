@@ -51,6 +51,9 @@ func (server *Server) setUpRouter() {
 	router.Use(middleware.LoggerMiddleware())
 	router.Use(middleware.CorsMiddleware())
 
+	// set up error handler
+	router.HTTPErrorHandler = middleware.ErrorHandler
+
 	// DI
 	userRepo := infrastructure.NewUser(server.db)
 
