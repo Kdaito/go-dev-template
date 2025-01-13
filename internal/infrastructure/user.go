@@ -3,8 +3,8 @@ package infrastructure
 import (
 	"database/sql"
 
-	"github.com/Kdaito/go-dev-template/internal/domain/model"
-	"github.com/Kdaito/go-dev-template/internal/domain/repository"
+	"github.com/Kdaito/kinodokuna-be/internal/domain/model"
+	"github.com/Kdaito/kinodokuna-be/internal/domain/repository"
 )
 
 type User struct {

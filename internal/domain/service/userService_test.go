@@ -3,7 +3,7 @@ package service
 import (
 	"testing"
 
-	"github.com/Kdaito/go-dev-template/internal/domain/model"
+	"github.com/Kdaito/kinodokuna-be/internal/domain/model"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/Kdaito/go-dev-template/internal/domain/model"
+import "github.com/Kdaito/kinodokuna-be/internal/domain/model"
 
 type IUserRepository interface {
 	GetUserList() ([]*model.User, error)

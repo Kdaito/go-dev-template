@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  title: "Go Dev Sample API"
+  title: "きのどくなー API"
   version: "1.0.0"
 host: "localhost:8080"
 basePath: "/v1"
