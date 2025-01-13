@@ -20,27 +20,33 @@ func ErrorHandler(err error, c echo.Context) {
 	// カスタムエラーの場合
 	if ce, ok := err.(*errors.Error); ok {
 		c.Logger().Error(ce)
-		c.JSON(ce.Code, ErrorResponse{
+		if JSONErr := c.JSON(ce.Code, ErrorResponse{
 			Code: ce.Code,
 			Message: http.StatusText(ce.Code),
-		})
+		}); JSONErr != nil {
+			c.Logger().Error(JSONErr)
+		}
 		return
 	}
 
 	// echo.HTTPErrorの場合
 	if he, ok := err.(*echo.HTTPError); ok {
 		c.Logger().Error(he)
-		c.JSON(he.Code, ErrorResponse{
+		if JSONErr := c.JSON(he.Code, ErrorResponse{
 			Code: he.Code,
 			Message: http.StatusText(he.Code),
-		})
+		}); JSONErr != nil {
+			c.Logger().Error(JSONErr)
+		}
 		return
 	}
 
 	// その他のエラーの場合
 	c.Logger().Error(err)
-	c.JSON(http.StatusInternalServerError, ErrorResponse{
+	if JSONErr := c.JSON(http.StatusInternalServerError, ErrorResponse{
 		Code: http.StatusInternalServerError,
 		Message: http.StatusText(http.StatusInternalServerError),
-	})
+	}); JSONErr != nil {
+		c.Logger().Error(JSONErr)
+	}
 }
