@@ -1,4 +1,4 @@
-module github.com/Kdaito/go-dev-template
+module github.com/Kdaito/kinodokuna-be
 
 go 1.23
 

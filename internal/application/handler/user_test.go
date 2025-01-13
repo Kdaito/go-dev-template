@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Kdaito/go-dev-template/internal/domain/model"
-	"github.com/Kdaito/go-dev-template/internal/lib"
+	"github.com/Kdaito/kinodokuna-be/internal/domain/model"
+	"github.com/Kdaito/kinodokuna-be/internal/lib"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"

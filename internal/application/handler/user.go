@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Kdaito/go-dev-template/internal/application/request"
-	"github.com/Kdaito/go-dev-template/internal/application/response"
-	"github.com/Kdaito/go-dev-template/internal/domain/service"
+	"github.com/Kdaito/kinodokuna-be/internal/application/request"
+	"github.com/Kdaito/kinodokuna-be/internal/application/response"
+	"github.com/Kdaito/kinodokuna-be/internal/domain/service"
 	"github.com/labstack/echo/v4"
 )
 

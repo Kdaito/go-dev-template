@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/Kdaito/go-dev-template/internal/domain/model"
+	"github.com/Kdaito/kinodokuna-be/internal/domain/model"
 	"github.com/stretchr/testify/assert"
 )
 
